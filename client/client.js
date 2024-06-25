@@ -3,16 +3,13 @@ const mainDiv = document.getElementById("root");
 mainDiv.innerHTML = "<h2>Doing Projects</h2><h2>week: 2024 June 10(Mon) ~ June 14(Fri)</h2><button onclick='openNav()'>Add Task</button><br >";
 let thisId= "";
 
- 
 function got_value(){}
 
- 
 (async ()=>{
     const gotTasks = await get_tasks();
     const tab = document.createElement("table");
     let stat_val="",this_class="";
 
- 
     let txt = "<tr><th>Name</th><th>Stage</th><th>Implement</th><th>Status</th><th>Worked hours</th><th>Received</th><th></th></tr>";
     for (let idx=0;idx < gotTasks.length; idx++){
         if (gotTasks[idx]['status'] < 100){
@@ -25,7 +22,6 @@ function got_value(){}
     //remove_item();
 })();
 
- 
 async function get_tasks(){
     const response = await fetch(books_url);
     const data = await response.json();
@@ -33,7 +29,6 @@ async function get_tasks(){
     return data.tasks;
 }
 
- 
 function add_book(this_task,this_stage,this_week,this_progress,this_many,this_date){
     /* Post to server side */
     const postData = {
@@ -63,7 +58,6 @@ function add_book(this_task,this_stage,this_week,this_progress,this_many,this_da
     //console.log("new item",tab,trEl);
 }
 
- 
 function del_book(bookId){
     /*DEL data saved in RAM*/
     const path = `${books_url}/${bookId}`;
@@ -84,7 +78,6 @@ function del_book(bookId){
     }
 }
 
- 
 async function edit_book(bookId){
     const data = await get_tasks();
     console.log("Editing...",bookId);
@@ -110,7 +103,6 @@ async function edit_book(bookId){
     // openNav();
     thisId = bookId; //Updated id
 }
-
  
 function putData(){
     // Update a record and PUT to server
@@ -145,7 +137,6 @@ function putData(){
         }
     }
 }
-
  
 function add_form(thisTitle="Add a new task",edit=false){
     console.log(thisTitle,edit);
@@ -169,8 +160,6 @@ function add_form(thisTitle="Add a new task",edit=false){
     }
     return formDiv;
 }
-
-
  
 function get_form(){
     const name = document.getElementById("fname").value;
@@ -184,6 +173,7 @@ function get_form(){
     add_book(name,stag,timeline,stat,hours,arrived);
     closeNav();
 }
+
 function closeNav(){
     /*
     openNav creates a new elem (section) every time, by setting
@@ -202,7 +192,6 @@ function openNav(){
     slider.addEventListener("input",(ev)=>{slider_out.textContent = ev.target.value;});
     document.querySelector("datalist").style.display="flex";
 }
-
  
 async function remove_item(){
     // currently not working
