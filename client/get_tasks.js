@@ -3,8 +3,6 @@ const mainDiv = document.getElementById("root");
 mainDiv.innerHTML = "<h2>Doing Projects</h2><h2>week: 2024 June 10(Mon) ~ June 14(Fri)</h2><button onclick='openNav()'>Add Task</button><br >";
 let thisId= "";
 
-function got_value(){}
-
 (async ()=>{
     const gotTasks = await get_tasks();
     const tab = document.createElement("table");
@@ -12,9 +10,11 @@ function got_value(){}
 
     let txt = "<tr><th>Name</th><th>Stage</th><th>Implement</th><th>Status</th><th>Worked hours</th><th>Received</th><th></th></tr>";
     for (let idx=0;idx < gotTasks.length; idx++){
-        if (gotTasks[idx]['status'] < 100){
-            stat_val="doing";this_class="doing_task";
-        }else{stat_val="done";this_class="done_task";}
+        if (gotTasks[idx]['stat'] == 100){
+            stat_val="done";this_class="done_task";
+        }else if(gotTasks[idx]['stat'] == 0){
+            stat_val="to-do";this_class="todo_task";
+        }else{stat_val="doing";this_class="doing_task";}
         txt += `<tr><td>${gotTasks[idx]['name']}</td><td>${gotTasks[idx]['stage']}</td><td>${gotTasks[idx]['timeline']}</td><td class="no_pad"><div id="StatBar" class="${this_class}">${stat_val}</div></td><td>${gotTasks[idx]['work_hours']}</td><td>${gotTasks[idx]['deadline']}</td><td><button class="update" onclick="edit_book('${gotTasks[idx]['id']}')">Update</button><button class="delete" onclick="del_book('${gotTasks[idx]['id']}')">Delete</button></td></tr>`;
     }
     tab.innerHTML = txt;
