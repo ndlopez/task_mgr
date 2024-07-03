@@ -3,7 +3,8 @@ from urllib import request
 from flask import Flask,jsonify, request
 from flask_cors import CORS
 import json
- 
+import sqlite3
+
 #config
 DEBUG=True
  
@@ -13,7 +14,10 @@ app.config.from_object(__name__)
  
 #enable CORs
 CORS(app, resources={r'/*':{'origins':'*'}})
- 
+
+task_data = {}
+data = {}
+
 def read_json():
     # open a file on server side
     with open(r"\Users\Documents\flask_vue_crud\server\tasks.json","r",encoding="utf-8") as fp:
@@ -21,11 +25,43 @@ def read_json():
     return task_data["tasks"]
  
 def remove_task(task_id):
+    # Remove item from DB and TASKS
+    conn = sqlite3.connect(DB_PATH)
+    cur = conn.cursor()
+    cur.execute(f"DELETE FROM {TBL_NAME} WHERE id='{task_id}'")
+    conn.commit()
+    conn.close()
+    
     for task in TASKS:
         if task['id'] == task_id:
             TASKS.remove(task)
             return True
     return False
+
+def get_db_conn():
+    connie = sqlite3.connect('/Users/truly/Documents/task_mgr/server/task.db')
+    connie.row_factory = sqlite3.Row
+    return connie
+
+ 
+def make_json(table_name):
+    connie = sqlite3.connect(DB_PATH)
+    tasky = connie.cursor()
+    tasky.execute(f"SELECT * FROM {table_name}")
+    cols = [descr[0] for descr in tasky.description]
+    zoey = []
+    for row in tasky.fetchall():
+        result = dict(zip(cols,row))
+        zoey.append(result)
+    connie.close()
+    print("dic",zoey)
+    return zoey
+    # return json.dumps(zoey) <- returns as string
+    '''tags = ("id","name","stage","days","stat","work_hours","received")
+    for item in tags:
+        TASKX[item] = tasky[0]
+    zoey.append(TASKX)
+    data["tasks"] = zoey'''
 
 #check route
 @app.route('/')
