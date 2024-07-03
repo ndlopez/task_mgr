@@ -112,13 +112,15 @@ def all_tasks():
             # uuid.uuid4().hex, 2024-01-22
             'name': post_data.get('name'),
             'stage':post_data.get('stage'),
-            'timeline': post_data.get('timeline'),
-            'status': post_data.get('status'),
-            'work_hours':post_data.get('work_hours'),
-            'deadline':post_data.get('deadline'),
-            'priority':post_data.get('priority')
+            'days': post_data.get('days'),
+            'stat': int(post_data.get('stat')),
+            'work_hours':int(post_data.get('work_hours')),
+            'received':post_data.get('received')
+            #,'priority':post_data.get('priority')
         })
         response_obj['message'] = 'Task added'
+        insert_from_js(TASKS[-1], TBL_NAME)
+        response_obj['info'] = 'DB updated'
     else:
         response_obj['tasks'] = TASKS
     return jsonify(response_obj)
@@ -134,13 +136,14 @@ def single_task(task_id):
             'id': post_data.get('id'),
             'name': post_data.get('name'),
             'stage':post_data.get('stage'),
-            'timeline': post_data.get('timeline'),
-            'status': post_data.get('status'),
-            'work_hours':post_data.get('work_hours'),
-            'deadline':post_data.get('deadline'),
-            'priority':post_data.get('priority')
+            'days': post_data.get('days'),
+            'stat': int(post_data.get('stat')),
+            'work_hours':int(post_data.get('work_hours')),
+            'received':post_data.get('received')
+            #,'priority':post_data.get('priority')
         })
         response_obj['message'] = 'task updated'
+        insert_from_js(TASKS[-1], TBL_NAME)
     if request.method == 'DELETE':
         remove_task(task_id)
         response_obj['message'] = 'task removed'
@@ -168,6 +171,8 @@ def list_item(task_name):
 
  
 if __name__ == "__main__":
+    DB_PATH = '/Users/truly/Documents/task_mgr/server/task.db'
+    TBL_NAME = "myTasks"
     TASKS = read_json()
     app.run(port=3872)
 
