@@ -64,9 +64,9 @@ function add_book(this_task,this_stage,these_days,this_progress,this_many,this_d
     //console.log("new item",tab,trEl);
 }
 
-function del_book(bookId){
+function del_book(taskId){
     /*DEL data saved in RAM*/
-    const path = `${books_url}/${bookId}`;
+    const path = `${task_url}/${taskId}`;
     fetch(path, {
         method: "DELETE",
         body: '',
@@ -84,7 +84,7 @@ function del_book(bookId){
     }
 }
 
-async function edit_book(bookId){
+async function edit_book(taskId){
     const data = await get_tasks();
     console.log("Editing...",bookId);
     mainDiv.appendChild(add_form("Edit task",true));
@@ -93,7 +93,7 @@ async function edit_book(bookId){
     // must find the index of book
     for (let jdx = 0; jdx < data.length; jdx++){
         /*if (Object.hasOwnProperty(key)){}*/
-        if (data[jdx]['id'] == bookId){
+        if (data[jdx]['id'] == taskId){
             idx = jdx;
             console.log("thisIdx",idx);
             break;
@@ -102,29 +102,29 @@ async function edit_book(bookId){
     // console.log("thisData",data[idx]);
     document.getElementById('fname').value = data[idx]['name'];
     document.getElementById('fstage').value = data[idx]['stage'];
-    document.getElementById('fweek').value = data[idx]['timeline'];
-    document.getElementById('fstat').value = data[idx]['status'];
+    document.getElementById('fweek').value = data[idx]['days'];
+    document.getElementById('fstat').value = data[idx]['stat'];
     document.getElementById('fhours').value = data[idx]['work_hours'];
-    document.getElementById('farrive').value = data[idx]['deadline'];
+    document.getElementById('farrive').value = data[idx]['received'];
     // openNav();
-    thisId = bookId; //Updated id
+    thisId = taskId; //Updated id
 }
  
 function putData(){
     // Update a record and PUT to server
     let bookId = thisId;
     const putData = {
-        id: bookId,
+        id: taskId,
         name: document.getElementById('fname').value,
         stage: document.getElementById('fstage').value,
-        timeline: document.getElementById('fweek').value,
-        status: document.getElementById('fstat').value,
+        days: document.getElementById('fweek').value,
+        stat: document.getElementById('fstat').value,
         // read: document.getElementById('book_read').checked,
-        hours: document.getElementById('fhours').value,
-        arrived: document.getElementById('farrive').value,
-        id: self.crypto.randomUUID()
+        work_hours: document.getElementById('fhours').value,
+        received: document.getElementById('farrive').value,
+        //id: self.crypto.randomUUID()
     };
-    const path = `${books_url}/${bookId}`;
+    const path = `${task_url}/${taskId}`;
     fetch(path, {
         method: "PUT",
         body: JSON.stringify(putData),
@@ -137,9 +137,15 @@ function putData(){
     const editItem = document.getElementsByClassName("update");
     for(let idx = 0;idx < editItem.length; idx++){
         if (editItem[idx].outerHTML.includes(bookId)){
-            console.log(bookId,"Edited");
+            console.log(taskId,"Edited");
             const thisTask = editItem[idx].parentElement.parentElement;
-            thisTask.innerHTML = `<td>${putData.name}</td><td>${putData.stage}</td><td>${putData.timeline}</td><td>${putData.status}</td><td>${putData.hours}</td><td>${putData.arrived}</td><td><button class="update" onclick="edit_book('${bookId}')">Update</button><button class="delete" onclick="del_book('${bookId}')">Delete</button></td>`;
+            if (putData['stat'] == 100){
+                stat_val="done";this_class="done_task";
+            }else if(putData['stat'] == 0){
+                stat_val="to-do";this_class="todo_task";
+            }else{
+                stat_val="doing";this_class="doing_task";}
+            thisTask.innerHTML = `<td>${putData.name}</td><td>${putData.stage}</td><td>${putData.days}</td><td class="no_pad"><div id="StatBar" class="${this_class}">${stat_val}</div></td><td>${putData.work_hours}</td><td>${putData.received}</td><td><button class="update" onclick="edit_book('${taskId}')">Update</button><button class="delete" onclick="del_book('${taskId}')">Delete</button></td>`;
         }
     }
 }
