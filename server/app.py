@@ -31,7 +31,7 @@ def remove_task(task_id):
     cur.execute(f"DELETE FROM {TBL_NAME} WHERE id='{task_id}'")
     conn.commit()
     conn.close()
-    
+
     for task in TASKS:
         if task['id'] == task_id:
             TASKS.remove(task)
@@ -62,6 +62,36 @@ def make_json(table_name):
         TASKX[item] = tasky[0]
     zoey.append(TASKX)
     data["tasks"] = zoey'''
+
+def insert_from_js(data, table_name):
+    # fetching values from JS-post
+    # with open(json_path, 'r') as file:
+    #    data = json.load(file)
+    # print("got this",data,data.keys(),data.values())
+    conn = sqlite3.connect(DB_PATH)
+    cur = conn.cursor()
+   
+    '''for entry in data:
+        # when data=[{key:value}]
+        keys = ', '.join(entry.keys())
+        question_marks = ', '.join(['?' for _ in entry])
+        values = tuple(entry.values())
+        cur.execute(f"INSERT INTO {table_name} ({keys}) VALUES ({question_marks})", values)
+    '''
+    keys = tuple(data.keys())
+    question_marks = ', '.join(['?' for _ in data])
+    values = tuple(data.values())
+    # print(keys,values,f"INSERT INTO {table_name} {keys} VALUES ({question_marks})")
+    cur.execute(f"INSERT INTO {table_name} {keys} VALUES ({question_marks})", values)
+
+    conn.commit()
+    conn.close()
+ 
+def del_one_item(new_data,db_path,table_name):
+    # must compare each value from id to prev stored
+    # actually better DEL record and create a new one
+    # cur.execute(f"UPDATE {table_name} SET key1={newVal}, key2={newVal2} WHERE id={this_id}")
+    pass
 
 #check route
 @app.route('/')
