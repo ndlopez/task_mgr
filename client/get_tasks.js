@@ -15,7 +15,7 @@ let thisId= "";
         }else if(gotTasks[idx]['stat'] == 0){
             stat_val="to-do";this_class="todo_task";
         }else{stat_val="doing";this_class="doing_task";}
-        txt += `<tr><td>${gotTasks[idx]['name']}</td><td>${gotTasks[idx]['stage']}</td><td>${gotTasks[idx]['timeline']}</td><td class="no_pad"><div id="StatBar" class="${this_class}">${stat_val}</div></td><td>${gotTasks[idx]['work_hours']}</td><td>${gotTasks[idx]['deadline']}</td><td><button class="update" onclick="edit_book('${gotTasks[idx]['id']}')">Update</button><button class="delete" onclick="del_book('${gotTasks[idx]['id']}')">Delete</button></td></tr>`;
+        txt += `<tr><td>${gotTasks[idx]['name']}</td><td>${gotTasks[idx]['stage']}</td><td>${gotTasks[idx]['days']}</td><td class="no_pad"><div id="StatBar" class="${this_class}">${stat_val}</div></td><td>${gotTasks[idx]['work_hours']}</td><td>${gotTasks[idx]['received']}</td><td><button class="update" onclick="edit_book('${gotTasks[idx]['id']}')">Update</button><button class="delete" onclick="del_book('${gotTasks[idx]['id']}')">Delete</button></td></tr>`;
     }
     tab.innerHTML = txt;
     mainDiv.appendChild(tab);
@@ -29,19 +29,19 @@ async function get_tasks(){
     return data.tasks;
 }
 
-function add_book(this_task,this_stage,this_week,this_progress,this_many,this_date){
+function add_book(this_task,this_stage,these_days,this_progress,this_many,this_date){
     /* Post to server side */
+    let stat_val="",this_class="";
     const postData = {
         name: this_task,
         stage: this_stage,
-        timeline: this_week,
-        status: this_progress,
-        //read: this_bool,
-        hours: this_many,
-        arrived: this_date,
+        days: these_days,
+        stat: this_progress,
+        work_hours: this_many,
+        received: this_date,
         id: self.crypto.randomUUID()
     }
-    fetch(books_url,{
+    fetch(task_url,{
         method: "POST",
         body: JSON.stringify(postData),
         headers:{
@@ -51,8 +51,14 @@ function add_book(this_task,this_stage,this_week,this_progress,this_many,this_da
     .then((response)=>response.json())
     .then((json)=>console.log(json));
     /* Update client-side */
+    if (postData['stat'] == 100){
+        stat_val="done";this_class="done_task";
+    }else if(postData['stat'] == 0){
+        stat_val="to-do";this_class="todo_task";
+    }else{
+        stat_val="doing";this_class="doing_task";}
     const trEl = document.createElement("TR");
-    trEl.innerHTML = `<td>${postData['name']}</td><td>${postData['stage']}</td><td>${postData['timeline']}</td><td>${postData['status']}</td><td>${postData['hours']}</td><td>${postData['arrived']}</td><td><button class="update" onclick="edit_book('${postData['id']}')">Update</button><button class="delete" onclick="del_book('${postData['id']}')">Delete</button></td>`;
+    trEl.innerHTML = `<td>${postData['name']}</td><td>${postData['stage']}</td><td>${postData['days']}</td><td class="no_pad"><div id="StatBar" class="${this_class}">${stat_val}</div></td><td>${postData['work_hours']}</td><td>${postData['received']}</td><td><button class="update" onclick="edit_book('${postData['id']}')">Update</button><button class="delete" onclick="del_book('${postData['id']}')">Delete</button></td>`;
    
     document.getElementsByTagName("tbody")[0].appendChild(trEl);
     //console.log("new item",tab,trEl);
