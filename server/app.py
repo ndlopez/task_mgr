@@ -4,6 +4,7 @@ from flask import Flask,jsonify, request
 from flask_cors import CORS
 import json
 import sqlite3
+from datetime import date,timedelta
 
 #config
 DEBUG=True
@@ -20,8 +21,9 @@ data = {}
 
 def read_json():
     # open a file on server side
-    with open(r"\Users\Documents\flask_vue_crud\server\tasks.json","r",encoding="utf-8") as fp:
-        task_data = json.load(fp)
+    # with open(r"\Users\Documents\flask_vue_crud\server\tasks.json","r",encoding="utf-8") as fp:
+    #    task_data = json.load(fp)
+    task_data["tasks"] = make_json("myTasks")
     return task_data["tasks"]
  
 def remove_task(task_id):
@@ -32,6 +34,7 @@ def remove_task(task_id):
     conn.commit()
     conn.close()
 
+    # Remove id from dicObj
     for task in TASKS:
         if task['id'] == task_id:
             TASKS.remove(task)
@@ -45,9 +48,12 @@ def get_db_conn():
 
  
 def make_json(table_name):
+    wkday = date.today().weekday()
     connie = sqlite3.connect(DB_PATH)
     tasky = connie.cursor()
-    tasky.execute(f"SELECT * FROM {table_name}")
+    tasky.execute(f"SELECT * FROM {table_name} WHERE days BETWEEN '{date.today()+timedelta(-wkday)}' AND '{date.today()+timedelta(4-wkday)}'")
+    print(f"SELECT * FROM {table_name} WHERE days BETWEEN '{date.today()+timedelta(-wkday)}' AND '{date.today()+timedelta(4-wkday)}'")
+    # tasky.execute(f"SELECT * FROM {table_name}")
     cols = [descr[0] for descr in tasky.description]
     zoey = []
     for row in tasky.fetchall():
