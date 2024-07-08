@@ -15,7 +15,7 @@ let thisId= "";
     const tab = document.createElement("table");
     let stat_val="",this_class="";
 
-    let txt = "<tr><th>Name</th><th>Stage</th><th>Implement</th><th>Status</th><th>Worked hours</th><th>Received</th><th></th></tr>";
+    let txt = "<tr><th>Name</th><th>Stage</th><th>Implement</th><th>Status</th><th>Work hours</th><th>Received</th><th></th></tr>";
     for (let idx=0;idx < gotTasks.length; idx++){
         if (gotTasks[idx]['stat'] == 100){
             stat_val="done";this_class="done_task";
@@ -36,18 +36,17 @@ async function get_tasks(){
     return data.tasks;
 }
 
-function add_book(this_task,this_stage,these_days,this_progress,this_many,this_date){
-    /* Post to server side */
+function add_book(postData){
+    /* Post to server side 
+    this_task,this_stage,these_days,this_progress,this_many,this_date*/
     let stat_val="",this_class="";
-    const postData = {
-        name: this_task,
-        stage: this_stage,
-        days: these_days,
-        stat: this_progress,
-        work_hours: this_many,
-        received: this_date,
+    /*const postData = {
+        name: this_task, stage: this_stage,
+        days: these_days, stat: this_progress,
+        work_hours: this_many, received: this_date,
         id: self.crypto.randomUUID()
-    }
+    }*/
+    postData['id'] = self.crypto.randomUUID();
     fetch(task_url,{
         method: "POST",
         body: JSON.stringify(postData),
@@ -93,11 +92,11 @@ function del_book(taskId){
 
 async function edit_book(taskId){
     const data = await get_tasks();
-    console.log("Editing...",bookId);
+    console.log("Editing...",taskId);
     mainDiv.appendChild(add_form("Edit task",true));
     //openNav();
     let idx = 0;
-    // must find the index of book
+    // must find the task index
     for (let jdx = 0; jdx < data.length; jdx++){
         /*if (Object.hasOwnProperty(key)){}*/
         if (data[jdx]['id'] == taskId){
@@ -119,11 +118,12 @@ async function edit_book(taskId){
  
 function putData(){
     // Update a record and PUT to server
-    let bookId = thisId;
+    let taskId = thisId;
+    let selStg = document.getElementById('fstage');
     const putData = {
         id: taskId,
         name: document.getElementById('fname').value,
-        stage: document.getElementById('fstage').value,
+        stage: selStg.options[selStg.selectedIndex].text,
         days: document.getElementById('fweek').value,
         stat: document.getElementById('fstat').value,
         // read: document.getElementById('book_read').checked,
@@ -142,6 +142,7 @@ function putData(){
     closeNav();
     // Updating the GUI without reloading the page 2023-09-27
     const editItem = document.getElementsByClassName("update");
+    let stat_val="",this_class="";
     for(let idx = 0;idx < editItem.length; idx++){
         if (editItem[idx].outerHTML.includes(bookId)){
             console.log(taskId,"Edited");
