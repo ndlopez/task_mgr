@@ -106,13 +106,19 @@ async function edit_book(taskId){
         }
     }
     // console.log("thisData",data[idx]);
+    let selStg = document.getElementById('fstage');
+    let slide = document.getElementById("fstat");
+    let slide_out = document.getElementById("rngVal");
+
     document.getElementById('fname').value = data[idx]['name'];
-    document.getElementById('fstage').value = data[idx]['stage'];
+    selStg.options[selStg.selectedIndex].text = data[idx]['stage'];    
     document.getElementById('fweek').value = data[idx]['days'];
-    document.getElementById('fstat').value = data[idx]['stat'];
+    slide.value = data[idx]['stat'];    
+    slide_out.textContent = slide.value;
     document.getElementById('fhours').value = data[idx]['work_hours'];
     document.getElementById('farrive').value = data[idx]['received'];
-    // openNav();
+    // Update slide value
+    slide.addEventListener("input",(ev)=>{slide_out.textContent = ev.target.value;});
     thisId = taskId; //Updated id
 }
  
