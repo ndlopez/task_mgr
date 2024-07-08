@@ -1,6 +1,13 @@
 const books_url = "http://127.0.0.1:3872/tasks";
+const thisDate = new Date();
+let monty = thisDate.getMonth();
+let dayna = thisDate.getDate();
+let wkday = thisDate.getDay(); //0:Sun,1:Mon
+
+const months = ["January","February","March","April","May","June","July","August"];
 const mainDiv = document.getElementById("root");
-mainDiv.innerHTML = "<h2>Doing Projects</h2><h2>week: 2024 June 10(Mon) ~ June 14(Fri)</h2><button onclick='openNav()'>Add Task</button><br >";
+mainDiv.innerHTML = `<div id='top_msg'><p>These dreams go on when I close my eyes</p></div><h2>Doing Projects</h2><h2>week: ${thisDate.getFullYear()} ${months[monty]} ${dayna-wkday+1}(Mon) ~ ${months[monty]} ${dayna+5-wkday}(Fri)</h2><p><button onclick='openNav()'>Add Task</button></p>`;
+
 let thisId= "";
 
 (async ()=>{
