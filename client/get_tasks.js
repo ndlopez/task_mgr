@@ -176,8 +176,10 @@ function add_form(thisTitle="Add a new task",edit=false){
         buttons = "<input type='button' value='Submit' onclick='get_form()' disabled><input type='button' value='Save' onclick='putData()'>";  
     }
     let listy = '<datalist id="progres"><option value="0" label="0"></option><option value="20" label="20"></option><option value="40" label="40"></option><option value="60" label="60"></option><option value="80" label="80"></option><option value="100" label="100"></option></datalist>';
+    let statThis = '<option value="to-do">To do</option><option value="doing">In progress</option><option value="stuck">Stuck</option><option value="done">Done</option>';
+    let job_stage ='<option value="simulation">Simulation</option><option value="building">Building Tool</option><option value="testing">Testing</option><option value="docs">資料作成</option><option value="edit">資料修正</option><option value="review">In Review</option>';
     formDiv.innerHTML = "<div class='modal-content'><div><h3>"+ thisTitle + "</h3><span class='close' onclick=closeNav()>&times;</span></div><div><form><label for='fname'>Task</label><br><input type='text' id='fname' name='fname'><br><br>" +
-    "<label for='fstage'>Stage</label><br><input type='text' id='fstage' name='fstage'><br><br><label for='fweek'>Timeline</label><br><input type='text' id='fweek' name='fweek'><br><br><label for='fstat'>Status [<output id='rngVal'></output>%]</label><br><input type='range' min='0' max='100' value='50' step='10' id='fstat' name='fstat' list='progres'><br>" + listy + "<br><label for='fhours'>Worked hours</label><br><input type='text' id='fhours' name='fhours'><br><br><label for='farrive'>Arrived</label><br><input type='text' id='farrive' name='farrive'><br><br>" + buttons + "</form></div></div>";
+    "<label for='fstage'>Stage</label><br><select id='fstage'><option value=''>--Please choose an stage--</option>" + job_stage + "</select><br><br><label for='fweek'>Timeline</label><br><input type='date' id='fweek' name='fweek'><br><br><label for='fstat'>Status [<output id='rngVal'></output>%]</label><br><input type='range' min='0' max='100' value='50' step='5' id='fstat' name='fstat'><br><br>" + "<label for='fhours'>Worked hours</label><br><input type='number' id='fhours' name='fhours' min='0' max='100'><br><br><label for='farrive'>Arrived</label><br><input type='date' id='farrive' name='farrive'><br><br>" + buttons + "</form></div></div>";
     /*<input type='checkbox' id='book_read' name='book_read' value='Read?'><label for='book_read'>Read?</label> */
     window.onclick = function(ev){
         if (ev.target == formDiv){
@@ -188,15 +190,17 @@ function add_form(thisTitle="Add a new task",edit=false){
 }
  
 function get_form(){
-    const name = document.getElementById("fname").value;
-    const timeline = document.getElementById("fweek").value;
-    // const read = document.getElementById("book_read").checked;
-    const stag = document.getElementById("fstage").value;
-    const hours = document.getElementById("fhours").value;
-    const arrived = document.getElementById("farrive").value;
-    const stat = document.getElementById("fstat").value;
-    console.log(name,timeline);
-    add_book(name,stag,timeline,stat,hours,arrived);
+    let selStg = document.getElementById("fstage");
+    const objData = {
+        name: document.getElementById("fname").value,
+        stage: selStg.options[selStg.selectedIndex].text,
+        days: document.getElementById("fweek").value,
+        stat: document.getElementById("fstat").value,
+        work_hours: document.getElementById("fhours").value,
+        received: document.getElementById("farrive").value
+    };
+    console.log(objData['name'],objData['days']);
+    add_book(objData);
     closeNav();
 }
 
@@ -216,7 +220,7 @@ function openNav(){
     slider_out.textContent = slider.value;
     console.log("stage",slider.value);
     slider.addEventListener("input",(ev)=>{slider_out.textContent = ev.target.value;});
-    document.querySelector("datalist").style.display="flex";
+    // document.querySelector("datalist").style.display="flex";
 }
  
 async function remove_item(){
