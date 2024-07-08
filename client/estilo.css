@@ -2,7 +2,6 @@ body{
     background-color: #bed2e0;
     color:#2e4054;
     font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-
 }
 table{
     width:100%;
@@ -13,6 +12,9 @@ table tr {
 }
 table td, table th{
     padding: 4px 10px;
+}
+.no_pad{
+    padding: 4px 0px;
 }
 table tr:nth-child(even){
     background-color: #f2f2f2;
@@ -26,7 +28,7 @@ table th{
     /*display: none;  Hidden by default */
     position: fixed; /* Stay in place */
     z-index: 1; /* Sit on top */
-    padding-top: 100px; /* Location of the box */
+    padding-top: 5%; /* Location of the box */
     left: 0;
     top: 0;
     width: 100%; /* Full width */
@@ -45,9 +47,12 @@ table th{
 .delete{
     color: #cc274c;
 }
+.centered{
+    text-align: center;
+}
 .close {
     position: absolute;
-    top: 15%;
+    top: 10%;
     color: #2e4054;
     right:15%;
     font-size: 28px;
@@ -56,10 +61,14 @@ table th{
 input[type="text"],input[type="range"]{
     width: 80%;
 }
+#top_msg{
+    background-color: #ffeea6;
+    display: none;
+}
 #StatBar{
-    width:100%;
-    height: 20px;
-    line-height: 20px;
+    width: 100%;
+    height: 25px;
+    line-height: 25px;
     color: #bed2e0;
     text-align: center;
 }
@@ -68,6 +77,9 @@ input[type="text"],input[type="range"]{
 }
 .doing_task{
     background-color: #cc274c;
+}
+.todo_task{
+    background-color: #2e4054;
 }
 datalist{
     display:flex;
