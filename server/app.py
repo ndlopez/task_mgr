@@ -23,8 +23,11 @@ def read_json():
     # open a file on server side
     # with open(r"\Users\Documents\flask_vue_crud\server\tasks.json","r",encoding="utf-8") as fp:
     #    task_data = json.load(fp)
-    task_data["tasks"] = make_json("myTasks")
-    return task_data["tasks"]
+    gabi = make_json("myTasks")
+    # task_data["tasks"] = make_json("myTasks")
+    task_data["tasks"] = gabi[0]
+    task_data["next_tasks"] = gabi[1]
+    return task_data
  
 def remove_task(task_id):
     # Remove item from DB and TASKS
@@ -40,12 +43,6 @@ def remove_task(task_id):
             TASKS.remove(task)
             return True
     return False
-
-def get_db_conn():
-    connie = sqlite3.connect('/Users/truly/Documents/task_mgr/server/task.db')
-    connie.row_factory = sqlite3.Row
-    return connie
-
  
 def make_json(table_name):
     wkday = date.today().weekday()
@@ -60,8 +57,22 @@ def make_json(table_name):
         result = dict(zip(cols,row))
         zoey.append(result)
     connie.close()
-    print("dic",zoey)
-    return zoey
+    # print("dic",zoey)
+    # fetch tasks for next week
+    tasky = connie.cursor()
+    tasky.execute(f"SELECT * FROM {table_name} WHERE days BETWEEN '{date.today()+timedelta(7-wkday)}' AND '{date.today()+timedelta(11-wkday)}' ORDER BY days")
+    cols = [descr[0] for descr in tasky.description]
+    avy = []
+    for row in tasky.fetchall():
+        result = dict(zip(cols,row))
+        avy.append(result)
+   
+    connie.close()
+ 
+    task_data["tasks"] = zoey
+    task_data["next_tasks"] = avy
+    print("dic",task_data)
+    return task_data
     # return json.dumps(zoey) <- returns as string
     '''tags = ("id","name","stage","days","stat","work_hours","received")
     for item in tags:
@@ -129,6 +140,7 @@ def all_tasks():
         response_obj['info'] = 'DB updated'
     else:
         response_obj['tasks'] = TASKS
+        response_obj['next_tasks'] = NEXT_TASKS
     return jsonify(response_obj)
 
  
