@@ -39,8 +39,14 @@ function daysInMonty(month,year){
     }
     tab.innerHTML = txt;
     mainDiv.appendChild(tab);
-    //remove_item();
-    txt = `<h2>Next week: ${thisDate.getFullYear()} ${months[monty]} ${dayna-wkday+8}(Mon) ~ ${months[monty]} ${dayna+12-wkday}(Fri)</h2><p><button onclick='openNav()'>Add Task</button></p>`;
+
+    /* attempts to fix date
+    let gabi = dayna - wkday + 8; //Mon 24-2+8 = 29
+    let oli = dayna - wkday + 12; //Fri 24-2+12 = 33
+    new Date(thisDate.getFullYear(),thisDate.getMonth(),dayna+12-wkday);*/
+    let gabi = new Date(thisAhead(8,wkday));//next Mon
+    let oli = new Date(thisAhead(12,wkday));//next Fri
+    txt = `<h2>Next week: ${thisDate.getFullYear()} ${months[gabi.getMonth()-1]} ${gabi.getDate()}(Mon) ~ ${months[oli.getMonth()-1]} ${oli.getDate()}(Fri)</h2><p><button onclick='openNav()'>Add Task</button></p>`;
     const nxtSec = document.createElement("section");
     nxtSec.innerHTML = txt;
     const tab2 = document.createElement("table");
@@ -69,14 +75,14 @@ async function get_tasks(){
 
 function add_task(postData){
     /* Post to server side 
-    this_task,this_stage,these_days,this_progress,this_many,this_date*/
-    let stat_val="",this_class="",stat_width="";
-    /*const postData = {
+    this_task,this_stage,these_days,this_progress,this_many,this_date
+    const postData = {
         name: this_task, stage: this_stage,
         days: these_days, stat: this_progress,
         work_hours: this_many, received: this_date,
         id: self.crypto.randomUUID()
     }*/
+    let stat_val="",this_class="",stat_width="";
     postData['id'] = self.crypto.randomUUID();
     fetch(task_url,{
         method: "POST",
@@ -285,6 +291,23 @@ async function remove_item(){
         }
     }
     del_book(data[jdx]['id']);
+}
+
+let formItems=[];
+function validate(e){
+    const inps=document.querySelectorAll('input');
+    const lbls=document.querySelectorAll('label');
+
+ 
+    let obj={};
+    obj.label=lbls[i];
+    obj.input=inps[i];
+    formItems.push(obj);
+    const errorLst = document.querySelector('.err ul');
+    errorLst.innerHTML='';
+    for(let kdx=0;kdx<formItems.length;kdx++){
+        let testIt=formItems[kdx];
+    }
 }
 /*
 <div id="StatBar">texty</div>
