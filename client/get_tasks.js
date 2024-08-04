@@ -128,27 +128,29 @@ async function edit_book(taskId){
     //openNav();
     let idx = 0;
     // must find the task index
-    for (let jdx = 0; jdx < data.length; jdx++){
+    for (let jdx = 0; jdx < data[0].length; jdx++){
         /*if (Object.hasOwnProperty(key)){}*/
-        if (data[jdx]['id'] == taskId){
+        if (data[0][jdx]['id'] == taskId){
             idx = jdx;
             console.log("thisIdx",idx);
             break;
         }
     }
     // console.log("thisData",data[idx]);
+    document.getElementById('fname').value = data[0][idx]['name'];
     let selStg = document.getElementById('fstage');
+    selStg.options[selStg.selectedIndex].text = data[0][idx]['stage'];
+    document.getElementById('fweek').value = data[0][idx]['days'];
+   
     let slide = document.getElementById("fstat");
-    let slide_out = document.getElementById("rngVal");
-
-    document.getElementById('fname').value = data[idx]['name'];
-    selStg.options[selStg.selectedIndex].text = data[idx]['stage'];    
-    document.getElementById('fweek').value = data[idx]['days'];
-    slide.value = data[idx]['stat'];    
+    slide.value = data[0][idx]['stat'];
+    let slide_out = document.getElementById("rngVal")
     slide_out.textContent = slide.value;
-    document.getElementById('fhours').value = data[idx]['work_hours'];
-    document.getElementById('farrive').value = data[idx]['received'];
-    // Update slide value
+    // document.getElementById('rngVal').value = data[0][idx]['stat'];
+ 
+    document.getElementById('fhours').value = data[0][idx]['work_hours'];
+    document.getElementById('farrive').value = data[0][idx]['received'];
+    // openNav();
     slide.addEventListener("input",(ev)=>{slide_out.textContent = ev.target.value;});
     thisId = taskId; //Updated id
 }
@@ -179,18 +181,20 @@ function putData(){
     closeNav();
     // Updating the GUI without reloading the page 2023-09-27
     const editItem = document.getElementsByClassName("update");
-    let stat_val="",this_class="";
+    let stat_val="",this_class="",stat_width="";
     for(let idx = 0;idx < editItem.length; idx++){
         if (editItem[idx].outerHTML.includes(bookId)){
             console.log(taskId,"Edited");
             const thisTask = editItem[idx].parentElement.parentElement;
             if (putData['stat'] == 100){
-                stat_val="done";this_class="done_task";
+                stat_val="done";this_class="done_task";stat_width="100";
             }else if(putData['stat'] == 0){
-                stat_val="to-do";this_class="todo_task";
+                stat_val="to-do";this_class="todo_task";stat_width="100";
             }else{
-                stat_val="doing";this_class="doing_task";}
-            thisTask.innerHTML = `<td>${putData.name}</td><td>${putData.stage}</td><td>${putData.days}</td><td class="no_pad"><div id="StatBar" class="${this_class}">${stat_val}</div></td><td>${putData.work_hours}</td><td>${putData.received}</td><td><button class="update" onclick="edit_book('${taskId}')">Update</button><button class="delete" onclick="del_book('${taskId}')">Delete</button></td>`;
+                stat_val="doing";this_class="doing_task";
+                stat_width=putData['stat'];
+            }
+            thisTask.innerHTML = `<td>${putData.name}</td><td>${putData.stage}</td><td>${putData.days}</td><td class="no_pad"><div class="grey-fill"><div id="StatBar" class="${this_class}" style="width:${stat_width}%">${stat_val}</div></div></td></td><td class="centered">${putData.work_hours}</td><td>${putData.received}</td><td><button class="update" onclick="edit_book('${taskId}')">Update</button><button class="delete" onclick="del_book('${taskId}')">Delete</button></td>`
         }
     }
 }
