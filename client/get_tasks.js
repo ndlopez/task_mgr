@@ -1,4 +1,4 @@
-const tasks_url = "http://127.0.0.1:3872/tasks";
+const task_url = "http://127.0.0.1:3872/tasks";
 const thisDate = new Date();
 let monty = thisDate.getMonth();
 let dayna = thisDate.getDate();
@@ -31,19 +31,37 @@ let thisId= "";
     tab.innerHTML = txt;
     mainDiv.appendChild(tab);
     //remove_item();
+    txt = `<h2>Next week: ${thisDate.getFullYear()} ${months[monty]} ${dayna-wkday+8}(Mon) ~ ${months[monty]} ${dayna+12-wkday}(Fri)</h2><p><button onclick='openNav()'>Add Task</button></p>`;
+    const nxtSec = document.createElement("section");
+    nxtSec.innerHTML = txt;
+    const tab2 = document.createElement("table");
+    stat_val="",this_class="";
+    txt = "<tr><th>Name</th><th>Stage</th><th>Implement</th><th>Status</th><th>Work hours</th><th>Received</th><th></th></tr>";
+    for (let idx=0;idx < gotTasks[1].length; idx++){
+        console.log("status",gotTasks[1][idx]['stat']);
+        if (gotTasks[1][idx]['stat'] == 100){
+            stat_val="done";this_class="done_task";
+        }else if(gotTasks[1][idx]['stat'] == 0){
+            stat_val="to-do";this_class="todo_task";
+        }else{stat_val="doing";this_class="doing_task";}
+        txt += `<tr><td>${gotTasks[1][idx]['name']}</td><td>${gotTasks[1][idx]['stage']}</td><td>${gotTasks[1][idx]['days']}</td><td class="no_pad"><div id="StatBar" class="${this_class}">${stat_val}</div></td><td class="centered">${gotTasks[1][idx]['work_hours']}</td><td>${gotTasks[1][idx]['received']}</td><td><button class="update" onclick="edit_book('${gotTasks[1][idx]['id']}')">Update</button><button class="delete" onclick="del_book('${gotTasks[1][idx]['id']}')">Delete</button></td></tr>`;
+    }
+    tab2.innerHTML = txt;
+    nxtSec.appendChild(tab2);
+    mainDiv.appendChild(nxtSec);
 })();
 
 async function get_tasks(){
     const response = await fetch(books_url);
     const data = await response.json();
     console.log("got data",data);
-    return data.tasks;
+    return [data.tasks,data.next_tasks];
 }
 
-function add_book(postData){
+function add_task(postData){
     /* Post to server side 
     this_task,this_stage,these_days,this_progress,this_many,this_date*/
-    let stat_val="",this_class="";
+    let stat_val="",this_class="",stat_width="";
     /*const postData = {
         name: this_task, stage: this_stage,
         days: these_days, stat: this_progress,
@@ -62,13 +80,15 @@ function add_book(postData){
     .then((json)=>console.log(json));
     /* Update client-side */
     if (postData['stat'] == 100){
-        stat_val="done";this_class="done_task";
+        stat_val="done";this_class="done_task";stat_width="100";
     }else if(postData['stat'] == 0){
-        stat_val="to-do";this_class="todo_task";
+        stat_val="to-do";this_class="todo_task";stat_width="100";
     }else{
-        stat_val="doing";this_class="doing_task";}
+        stat_val="doing";this_class="doing_task";
+        stat_width=postData['stat'];
+    }
     const trEl = document.createElement("TR");
-    trEl.innerHTML = `<td>${postData['name']}</td><td>${postData['stage']}</td><td>${postData['days']}</td><td class="no_pad"><div id="StatBar" class="${this_class}">${stat_val}</div></td><td>${postData['work_hours']}</td><td>${postData['received']}</td><td><button class="update" onclick="edit_book('${postData['id']}')">Update</button><button class="delete" onclick="del_book('${postData['id']}')">Delete</button></td>`;
+    trEl.innerHTML = `<td>${postData['name']}</td><td>${postData['stage']}</td><td>${postData['days']}</td><td class="no_pad"><div class="grey-fill"><div id="StatBar" class="${this_class}" style="width:${stat_width}%">${stat_val}</div></div></td><td class="centered">${postData['work_hours']}</td><td>${postData['received']}</td><td><button class="update" onclick="edit_book('${postData['id']}')">Update</button><button class="delete" onclick="del_book('${postData['id']}')">Delete</button></td>`;
    
     document.getElementsByTagName("tbody")[0].appendChild(trEl);
     //console.log("new item",tab,trEl);
@@ -86,12 +106,19 @@ function del_book(taskId){
     const delBtn = document.getElementsByClassName("delete");
     for (let idx=0;idx < delBtn.length;idx++){
         if (delBtn[idx].outerHTML.includes(bookId)){
+            disp_msg(`Bye bye ${taskId}`);
             console.log("Bye bye",delBtn[idx].outerHTML);
             const task = delBtn[idx].parentElement.parentElement;
             task.remove();
             // task.style.display = "none";
         }
     }
+}
+
+function disp_msg(this_msg){
+    let topp = document.getElementById('top_msg');
+    topp.style.display = "block";
+    topp.innerHTML = this_msg;
 }
 
 async function edit_book(taskId){
@@ -204,7 +231,7 @@ function get_form(){
         received: document.getElementById("farrive").value
     };
     console.log(objData['name'],objData['days']);
-    add_book(objData);
+    add_task(objData);
     closeNav();
 }
 
