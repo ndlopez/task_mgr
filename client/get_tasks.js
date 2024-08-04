@@ -1,4 +1,4 @@
-const books_url = "http://127.0.0.1:3872/tasks";
+const tasks_url = "http://127.0.0.1:3872/tasks";
 const thisDate = new Date();
 let monty = thisDate.getMonth();
 let dayna = thisDate.getDate();
@@ -6,23 +6,27 @@ let wkday = thisDate.getDay(); //0:Sun,1:Mon
 
 const months = ["January","February","March","April","May","June","July","August"];
 const mainDiv = document.getElementById("root");
-mainDiv.innerHTML = `<div id='top_msg'><p>These dreams go on when I close my eyes</p></div><h2>Doing Projects</h2><h2>week: ${thisDate.getFullYear()} ${months[monty]} ${dayna-wkday+1}(Mon) ~ ${months[monty]} ${dayna+5-wkday}(Fri)</h2><p><button onclick='openNav()'>Add Task</button></p>`;
+mainDiv.innerHTML = `<h2>Doing Projects</h2><h2>This week: ${thisDate.getFullYear()} ${months[monty]} ${dayna-wkday+1}(Mon) ~ ${months[monty]} ${dayna+5-wkday}(Fri)</h2><p><button onclick='openNav()'>Add Task</button></p>`;
 
 let thisId= "";
 
 (async ()=>{
     const gotTasks = await get_tasks();
     const tab = document.createElement("table");
-    let stat_val="",this_class="";
-
+    let stat_val="",this_class="",stat_width="";
     let txt = "<tr><th>Name</th><th>Stage</th><th>Implement</th><th>Status</th><th>Work hours</th><th>Received</th><th></th></tr>";
-    for (let idx=0;idx < gotTasks.length; idx++){
-        if (gotTasks[idx]['stat'] == 100){
+    for (let idx=0;idx < gotTasks[0].length; idx++){
+        if (gotTasks[0][idx]['stat'] == 100){
             stat_val="done";this_class="done_task";
-        }else if(gotTasks[idx]['stat'] == 0){
+            stat_width="100";
+        }else if(gotTasks[0][idx]['stat'] == 0){
             stat_val="to-do";this_class="todo_task";
-        }else{stat_val="doing";this_class="doing_task";}
-        txt += `<tr><td>${gotTasks[idx]['name']}</td><td>${gotTasks[idx]['stage']}</td><td>${gotTasks[idx]['days']}</td><td class="no_pad"><div id="StatBar" class="${this_class}">${stat_val}</div></td><td>${gotTasks[idx]['work_hours']}</td><td>${gotTasks[idx]['received']}</td><td><button class="update" onclick="edit_book('${gotTasks[idx]['id']}')">Update</button><button class="delete" onclick="del_book('${gotTasks[idx]['id']}')">Delete</button></td></tr>`;
+            stat_width="100";
+        }else{
+            stat_val="doing";this_class="doing_task";
+            stat_width=gotTasks[0][idx]['stat'];
+        }
+        txt += `<tr><td>${gotTasks[0][idx]['name']}</td><td>${gotTasks[0][idx]['stage']}</td><td>${gotTasks[0][idx]['days']}</td><td class="no_pad"><div id="StatBar" class="${this_class}">${stat_val}</div></td><td>${gotTasks[0][idx]['work_hours']}</td><td>${gotTasks[0][idx]['received']}</td><td><button class="update" onclick="edit_book('${gotTasks[0][idx]['id']}')">Update</button><button class="delete" onclick="del_book('${gotTasks[0][idx]['id']}')">Delete</button></td></tr>`;
     }
     tab.innerHTML = txt;
     mainDiv.appendChild(tab);
