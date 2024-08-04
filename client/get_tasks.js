@@ -1,14 +1,23 @@
 const task_url = "http://127.0.0.1:3872/tasks";
-const thisDate = new Date();
+let thisDate = new Date();
 let monty = thisDate.getMonth();
 let dayna = thisDate.getDate();
 let wkday = thisDate.getDay(); //0:Sun,1:Mon
 
-const months = ["January","February","March","April","May","June","July","August"];
+let thisMany = daysInMonty(monty,thisDate.getFullYear());
+let thisAhead = (kate)=>{return thisDate.setDate(dayna + kate - wkday);}
+const months = ["January","February","March","April","May","June","July",
+"August","September","October","November","December"];
+let fiveDays = new Date(thisAhead(5)); 
+
 const mainDiv = document.getElementById("root");
-mainDiv.innerHTML = `<h2>Doing Projects</h2><h2>This week: ${thisDate.getFullYear()} ${months[monty]} ${dayna-wkday+1}(Mon) ~ ${months[monty]} ${dayna+5-wkday}(Fri)</h2><p><button onclick='openNav()'>Add Task</button></p>`;
+mainDiv.innerHTML = `<h2>Doing Projects</h2><h2>This week: ${thisDate.getFullYear()} ${months[monty]} ${dayna-wkday+1}(Mon) ~ ${months[fiveDays.getMonth()-1]} ${fiveDays.getDate()}(Fri)</h2><p><button onclick='openNav()'>Add Task</button></p>`;
 
 let thisId= "";
+
+function daysInMonty(month,year){
+    return new Date(year,month,0).getDate();
+}
 
 (async ()=>{
     const gotTasks = await get_tasks();
