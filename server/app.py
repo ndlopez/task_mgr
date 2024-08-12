@@ -66,7 +66,7 @@ def make_dict(tbl,day1,day2):
     return amy
  
 def make_json(table_name):
-    wkday = date.today().weekday()
+    """wkday = date.today().weekday()
     connie = sqlite3.connect(DB_PATH)
     tasky = connie.cursor()
     tasky.execute(f"SELECT * FROM {table_name} WHERE days BETWEEN '{date.today()+timedelta(-wkday)}' AND '{date.today()+timedelta(4-wkday)}'")
@@ -77,29 +77,14 @@ def make_json(table_name):
     for row in tasky.fetchall():
         result = dict(zip(cols,row))
         zoey.append(result)
-    connie.close()
+    connie.close()"""
     # print("dic",zoey)
     # fetch tasks for next week
-    tasky = connie.cursor()
-    tasky.execute(f"SELECT * FROM {table_name} WHERE days BETWEEN '{date.today()+timedelta(7-wkday)}' AND '{date.today()+timedelta(11-wkday)}' ORDER BY days")
-    cols = [descr[0] for descr in tasky.description]
-    avy = []
-    for row in tasky.fetchall():
-        result = dict(zip(cols,row))
-        avy.append(result)
-   
-    connie.close()
- 
-    task_data["tasks"] = zoey
-    task_data["next_tasks"] = avy
+    task_data["tasks"] = make_dict(table_name,0,4)
+    task_data["next_tasks"] = make_dict(table_name,7,11)
     print("dic",task_data)
     return task_data
-    # return json.dumps(zoey) <- returns as string
-    '''tags = ("id","name","stage","days","stat","work_hours","received")
-    for item in tags:
-        TASKX[item] = tasky[0]
-    zoey.append(TASKX)
-    data["tasks"] = zoey'''
+
 
 def insert_from_js(data, table_name):
     # fetching values from JS-post
@@ -207,6 +192,9 @@ def list_item(task_name):
 if __name__ == "__main__":
     DB_PATH = '/Users/truly/Documents/task_mgr/server/task.db'
     TBL_NAME = "myTasks"
-    TASKS = read_json()
+    #update arrays
+    make_json(TBL_NAME)
+    TASKS = task_data("tasks")
+    NEXT_TASKS = task_data["next_tasks"]
     app.run(port=3872)
 
