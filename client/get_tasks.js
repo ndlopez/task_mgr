@@ -80,10 +80,15 @@ function addDays2Date(objDate, intDays){
 })();
 
 async function get_tasks(){
-    const response = await fetch(books_url);
-    const data = await response.json();
-    console.log("got data",data);
-    return [data.tasks,data.next_tasks];
+    try {
+        const response = await fetch(task_url);
+        const data = await response.json();
+        // console.log("got data",data);
+        return [data.tasks,data.next_tasks];
+    } catch (error) {
+        console.log("503: Server is down or in maintenance");
+        return [];
+    }
 }
 
 function add_task(postData){
@@ -133,11 +138,12 @@ function del_book(taskId){
     /* Hide element from ui */
     const delBtn = document.getElementsByClassName("delete");
     for (let idx=0;idx < delBtn.length;idx++){
-        if (delBtn[idx].outerHTML.includes(bookId)){
-            disp_msg(`Bye bye ${taskId}`);
+        if (delBtn[idx].outerHTML.includes(taskId)){
             console.log("Bye bye",delBtn[idx].outerHTML);
-            const task = delBtn[idx].parentElement.parentElement;
-            task.remove();
+            const taskParent = delBtn[idx].parentElement.parentElement;
+            // console.log("parent",task);
+            disp_msg(`Bye bye ${taskParent.firstChild.innerText}`);
+            taskParent.remove();
             // task.style.display = "none";
         }
     }
@@ -147,6 +153,7 @@ function disp_msg(this_msg){
     let topp = document.getElementById('top_msg');
     topp.style.display = "block";
     topp.innerHTML = this_msg;
+    // must add temporizer to rm msg
 }
 
 async function edit_book(taskId){
