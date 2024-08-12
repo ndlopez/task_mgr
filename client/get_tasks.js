@@ -194,6 +194,8 @@ function putData(){
     // Update a record and PUT to server
     let taskId = thisId;
     let selStg = document.getElementById('fstage');
+    let workHours = document.getElementById('fhours').value;
+    if (workHours == ""){ workHours = "0"; }
     const putData = {
         id: taskId,
         name: document.getElementById('fname').value,
@@ -201,7 +203,7 @@ function putData(){
         days: document.getElementById('fweek').value,
         stat: document.getElementById('fstat').value,
         // read: document.getElementById('book_read').checked,
-        work_hours: document.getElementById('fhours').value,
+        work_hours: workHours,
         received: document.getElementById('farrive').value,
         //id: self.crypto.randomUUID()
     };
@@ -247,7 +249,7 @@ function add_form(thisTitle="Add a new task",edit=false){
     }
     let listy = '<datalist id="progres"><option value="0" label="0"></option><option value="20" label="20"></option><option value="40" label="40"></option><option value="60" label="60"></option><option value="80" label="80"></option><option value="100" label="100"></option></datalist>';
     let statThis = '<option value="to-do">To do</option><option value="doing">In progress</option><option value="stuck">Stuck</option><option value="done">Done</option>';
-    let job_stage ='<option value="simulation">Simulation</option><option value="building">Building Tool</option><option value="testing">Testing</option><option value="docs">資料作成</option><option value="edit">資料修正</option><option value="review">In Review</option>';
+    let job_stage ='<option value="learn">e-Learning</option><option value="simulation">Simulation</option><option value="building">Building Tool</option><option value="testing">Testing</option><option value="docs">資料作成</option><option value="edit">資料修正</option><option value="review">In Review</option><option value="release">Release</option>';
     formDiv.innerHTML = "<div class='modal-content'><div><h3>"+ thisTitle + "</h3><span class='close' onclick=closeNav()>&times;</span></div><div><form><label for='fname'>Task</label><br><input type='text' id='fname' name='fname'><br><br>" +
     "<label for='fstage'>Stage</label><br><select id='fstage'><option value=''>--Please choose an stage--</option>" + job_stage + "</select><br><br><label for='fweek'>Timeline</label><br><input type='date' id='fweek' name='fweek'><br><br><label for='fstat'>Status [<output id='rngVal'></output>%]</label><br><input type='range' min='0' max='100' value='50' step='5' id='fstat' name='fstat'><br><br>" + "<label for='fhours'>Worked hours</label><br><input type='number' id='fhours' name='fhours' min='0' max='100'><br><br><label for='farrive'>Arrived</label><br><input type='date' id='farrive' name='farrive'><br><br>" + buttons + "</form></div></div>";
     /*<input type='checkbox' id='book_read' name='book_read' value='Read?'><label for='book_read'>Read?</label> */
@@ -318,7 +320,6 @@ function validate(e){
     const inps=document.querySelectorAll('input');
     const lbls=document.querySelectorAll('label');
 
- 
     let obj={};
     obj.label=lbls[i];
     obj.input=inps[i];
