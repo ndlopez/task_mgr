@@ -19,12 +19,24 @@ function daysInMonty(month,year){
     return new Date(year,month,0).getDate();
 }
 
+function addDays2Date(objDate, intDays){
+    let addMillis = (intDays*24)*60*60*1000;
+    return new Date(objDate+addMillis);
+}
+
 (async ()=>{
     const gotTasks = await get_tasks();
     const tab = document.createElement("table");
     let stat_val="",this_class="",stat_width="";
     let txt = "<tr><th>Name</th><th>Stage</th><th>Implement</th><th>Status</th><th>Work hours</th><th>Received</th><th></th></tr>";
-    for (let idx=0;idx < gotTasks[0].length; idx++){
+    let gabi = addDays2Date(Date.now(),8-wkday);
+    let oli = addDays2Date(Date.now(),12-wkday);
+
+    if (gotTasks.length < 1){
+        txt += "503: Server Down";
+    }else{
+        //for (let jdx =0;jdx < gotTasks.length;jdx++){}
+        for (let idx=0;idx < gotTasks[0].length; idx++){
         if (gotTasks[0][idx]['stat'] == 100){
             stat_val="done";this_class="done_task";
             stat_width="100";
@@ -36,7 +48,9 @@ function daysInMonty(month,year){
             stat_width=gotTasks[0][idx]['stat'];
         }
         txt += `<tr><td>${gotTasks[0][idx]['name']}</td><td>${gotTasks[0][idx]['stage']}</td><td>${gotTasks[0][idx]['days']}</td><td class="no_pad"><div id="StatBar" class="${this_class}">${stat_val}</div></td><td>${gotTasks[0][idx]['work_hours']}</td><td>${gotTasks[0][idx]['received']}</td><td><button class="update" onclick="edit_book('${gotTasks[0][idx]['id']}')">Update</button><button class="delete" onclick="del_book('${gotTasks[0][idx]['id']}')">Delete</button></td></tr>`;
+        }//idx loop
     }
+    
     tab.innerHTML = txt;
     mainDiv.appendChild(tab);
 
@@ -44,9 +58,8 @@ function daysInMonty(month,year){
     let gabi = dayna - wkday + 8; //Mon 24-2+8 = 29
     let oli = dayna - wkday + 12; //Fri 24-2+12 = 33
     new Date(thisDate.getFullYear(),thisDate.getMonth(),dayna+12-wkday);*/
-    let gabi = new Date(thisAhead(8,wkday));//next Mon
-    let oli = new Date(thisAhead(12,wkday));//next Fri
-    txt = `<h2>Next week: ${thisDate.getFullYear()} ${months[gabi.getMonth()-1]} ${gabi.getDate()}(Mon) ~ ${months[oli.getMonth()-1]} ${oli.getDate()}(Fri)</h2><p><button onclick='openNav()'>Add Task</button></p>`;
+    
+    txt = `<h2>Next week: ${thisDate.getFullYear()} ${months[gabi.getMonth()]} ${gabi.getDate()}(Mon) ~ ${months[oli.getMonth()]} ${oli.getDate()}(Fri)</h2><p><button onclick='openNav()'>Add Task</button></p>`;
     const nxtSec = document.createElement("section");
     nxtSec.innerHTML = txt;
     const tab2 = document.createElement("table");
