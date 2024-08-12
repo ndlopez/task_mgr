@@ -19,6 +19,12 @@ CORS(app, resources={r'/*':{'origins':'*'}})
 task_data = {}
 data = {}
 
+def del_one_item(new_data,db_path,table_name):
+    # must compare each value from id to prev stored
+    # actually better DEL record and create a new one
+    # cur.execute(f"UPDATE {table_name} SET key1={newVal}, key2={newVal2} WHERE id={this_id}")
+    pass
+
 def read_json():
     # open a file on server side
     # with open(r"\Users\Documents\flask_vue_crud\server\tasks.json","r",encoding="utf-8") as fp:
@@ -43,6 +49,21 @@ def remove_task(task_id):
             TASKS.remove(task)
             return True
     return False
+
+def make_dict(tbl,day1,day2):
+    amy = []
+    wkday = date.today().weekday()
+    connie = sqlite3.connect(DB_PATH)
+    tasky = connie.cursor()
+    tasky.execute(f"SELECT * FROM {tbl} WHERE days BETWEEN '{date.today()+timedelta(day1-wkday)}' AND '{date.today()+timedelta(day2-wkday)}' ORDER BY days")
+    print(f"SELECT * FROM {tbl} WHERE days BETWEEN '{date.today()+timedelta(day1-wkday)}' AND '{date.today()+timedelta(day2-wkday)}'")
+    cols = [descr[0] for descr in tasky.description]
+    for row in tasky.fetchall():
+        result = dict(zip(cols,row))
+        amy.append(result)
+   
+    connie.close()
+    return amy
  
 def make_json(table_name):
     wkday = date.today().weekday()
@@ -104,11 +125,6 @@ def insert_from_js(data, table_name):
     conn.commit()
     conn.close()
  
-def del_one_item(new_data,db_path,table_name):
-    # must compare each value from id to prev stored
-    # actually better DEL record and create a new one
-    # cur.execute(f"UPDATE {table_name} SET key1={newVal}, key2={newVal2} WHERE id={this_id}")
-    pass
 
 #check route
 @app.route('/')
