@@ -3,6 +3,10 @@ body{
     color:#2e4054;
     font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
+p{margin: 0px;}
+.tasky{
+   background-color: aliceblue;
+}
 table{
     width:100%;
     border-collapse: collapse;
@@ -44,6 +48,17 @@ table th{
     border: 1px solid #888;
     width: 70%;  
 }
+.grey-fill{
+   background-color: #fadbd0;
+   width: 80%;
+   border-radius: 5px;
+}
+.col80{
+   width: 80%;
+}
+.float_left{
+   float: left;
+}
 .delete{
     color: #cc274c;
 }
@@ -61,6 +76,9 @@ table th{
 input[type="text"],input[type="range"]{
     width: 80%;
 }
+input[type="button"]{
+   width: 50%;
+}
 #top_msg{
     background-color: #ffeea6;
     display: none;
@@ -72,14 +90,18 @@ input[type="text"],input[type="range"]{
     color: #bed2e0;
     text-align: center;
 }
+.done_task,.doing_task{
+    color: #bed2e0;
+}
 .done_task{
     background-color: green;
 }
 .doing_task{
-    background-color: #cc274c;
+   background-color: #cc274c;
 }
 .todo_task{
-    background-color: #2e4054;
+   /*background-color: #2e4054;*/
+   color:#2e4054;
 }
 datalist{
     display:flex;
