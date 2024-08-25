@@ -12,7 +12,7 @@ const assign = ["Me","Boss","Client"];
 let fiveDays = new Date(thisAhead(5)); 
 
 const mainDiv = document.getElementById("root");
-mainDiv.innerHTML = `<h2>Doing Projects</h2><h2>This week: ${thisDate.getFullYear()} ${months[monty]} ${dayna-wkday+1}(Mon) ~ ${months[fiveDays.getMonth()-1]} ${fiveDays.getDate()}(Fri)</h2><p><button onclick='openNav()'>Add Task</button></p>`;
+mainDiv.innerHTML = `<h2>Doing Projects</h2><div class="tasky"><h3>&nbsp;This week: ${thisDate.getFullYear()} ${months[monty]} ${dayna-wkday+1}(Mon) ~ ${months[fiveDays.getMonth()]} ${fiveDays.getDate()}(Fri)</h3><p><button onclick='openNav()'>Add Task</button></p></div>`;
 
 let thisId= "";
 
@@ -60,12 +60,12 @@ function addDays2Date(objDate, intDays){
     let oli = dayna - wkday + 12; //Fri 24-2+12 = 33
     new Date(thisDate.getFullYear(),thisDate.getMonth(),dayna+12-wkday);*/
     
-    txt = `<h2>Next week: ${thisDate.getFullYear()} ${months[gabi.getMonth()]} ${gabi.getDate()}(Mon) ~ ${months[oli.getMonth()]} ${oli.getDate()}(Fri)</h2><p><button onclick='openNav()'>Add Task</button></p>`;
+    txt = `<div class="tasky"><h3>&nbsp;Next week: ${thisDate.getFullYear()} ${months[gabi.getMonth()]} ${gabi.getDate()}(Mon) ~ ${months[oli.getMonth()]} ${oli.getDate()}(Fri)</h3><p><button onclick='openNav()'>Add Task</button></p></div>`;
     const nxtSec = document.createElement("section");
     nxtSec.innerHTML = txt;
     const tab2 = document.createElement("table");
     stat_val="",this_class="";
-    txt = "<tr><th>Name</th><th>Stage</th><th>Implement</th><th>Status</th><th>Work hours</th><th>Received</th><th></th></tr>";
+    txt = "<tr><th>Name</th><th>Stage</th><!--th>Implement</th><th>Status</th--><th>Work hours</th><th>Assigned</th><th>Actions</th></tr>";
     for (let idx=0;idx < gotTasks[1].length; idx++){
         console.log("status",gotTasks[1][idx]['stat']);
         if (gotTasks[1][idx]['stat'] == 100){
@@ -73,7 +73,14 @@ function addDays2Date(objDate, intDays){
         }else if(gotTasks[1][idx]['stat'] == 0){
             stat_val="to-do";this_class="todo_task";
         }else{stat_val="doing";this_class="doing_task";}
-        txt += `<tr><td>${gotTasks[1][idx]['name']}</td><td>${gotTasks[1][idx]['stage']}</td><td>${gotTasks[1][idx]['days']}</td><td class="no_pad"><div id="StatBar" class="${this_class}">${stat_val}</div></td><td class="centered">${gotTasks[1][idx]['work_hours']}</td><td>${gotTasks[1][idx]['received']}</td><td><button class="update" onclick="edit_book('${gotTasks[1][idx]['id']}')">Update</button><button class="delete" onclick="del_book('${gotTasks[1][idx]['id']}')">Delete</button></td></tr>`;
+       stg_stat = assign[0];
+       if (gotTasks[1][idx]['stage'].includes("Review"))
+           stg_stat = assign[1];
+       if (gotTasks[1][idx]['stage'].includes("Release"))
+           stg_stat = assign[2];
+        txt += `<tr><span><td>${gotTasks[1][idx]['name']}</span><div class='grey-fill float_left'><div class='${this_class}' style="width:${gotTasks[1][idx]['stat']}%;height:12px;border-radius:5px;"></div></div><div class="float_left">${gotTasks[1][idx]['stat']}%</div>
+       </td><td><span>${gotTasks[1][idx]['stage']}</span><br><span>${gotTasks[1][idx]['days']}</span></td>
+       <!--td class="no_pad"><div id="StatBar" class="${this_class}">${stat_val}</div></td--><td class="centered">${gotTasks[1][idx]['work_hours']}</td><td><span>${stg_stat}</span><br><span>${gotTasks[1][idx]['received']}</span></td><td><button class="update" onclick="edit_book('${gotTasks[1][idx]['id']}')">Update</button><button class="delete" onclick="del_book('${gotTasks[1][idx]['id']}')">Delete</button></td></tr>`;
     }
     tab2.innerHTML = txt;
     nxtSec.appendChild(tab2);
