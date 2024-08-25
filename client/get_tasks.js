@@ -129,7 +129,7 @@ function add_task(postData){
         stat_width=postData['stat'];
     }
     const trEl = document.createElement("TR");
-    trEl.innerHTML = `<td>${postData['name']}</td><td>${postData['stage']}</td><td>${postData['days']}</td><td class="no_pad"><div class="grey-fill"><div id="StatBar" class="${this_class}" style="width:${stat_width}%">${stat_val}</div></div></td><td class="centered">${postData['work_hours']}</td><td>${postData['received']}</td><td><button class="update" onclick="edit_book('${postData['id']}')">Update</button><button class="delete" onclick="del_book('${postData['id']}')">Delete</button></td>`;
+    trEl.innerHTML = `<td><span>${postData['name']}</span><div class='grey-fill float_left'><div class='${this_class}' style="width:${stat_width}%;height:12px;border-radius:5px;"></div></div><div class="float_left">${postData['stat']}%</div></td><td><span>${postData['stage']}</span><br><span>${postData['days']}</span></td><!--td class="no_pad"><div class="grey-fill"><div id="StatBar" class="${this_class}" style="width:${stat_width}%">${stat_val}</div></div></td--><td class="centered">${postData['work_hours']}</td><td>${postData['received']}</td><td><button class="update" onclick="edit_book('${postData['id']}')">Update</button><button class="delete" onclick="del_book('${postData['id']}')">Delete</button></td>`;
    
     document.getElementsByTagName("tbody")[0].appendChild(trEl);
     //console.log("new item",tab,trEl);
