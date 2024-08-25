@@ -8,6 +8,7 @@ let thisMany = daysInMonty(monty,thisDate.getFullYear());
 let thisAhead = (kate)=>{return thisDate.setDate(dayna + kate - wkday);}
 const months = ["January","February","March","April","May","June","July",
 "August","September","October","November","December"];
+const assign = ["Me","Boss","Client"];
 let fiveDays = new Date(thisAhead(5)); 
 
 const mainDiv = document.getElementById("root");
@@ -27,8 +28,8 @@ function addDays2Date(objDate, intDays){
 (async ()=>{
     const gotTasks = await get_tasks();
     const tab = document.createElement("table");
-    let stat_val="",this_class="",stat_width="";
-    let txt = "<tr><th>Name</th><th>Stage</th><th>Implement</th><th>Status</th><th>Work hours</th><th>Received</th><th></th></tr>";
+    let stat_val="",this_class="",stat_width="",stg_stat="";
+    let txt = "<tr><th>Name</th><th>Stage</th><!--th>Implement</th><th>Status</th--><th>Work hours</th><th>Assigned</th><th>Actions</th></tr>";
     let gabi = addDays2Date(Date.now(),8-wkday);
     let oli = addDays2Date(Date.now(),12-wkday);
 
@@ -47,7 +48,7 @@ function addDays2Date(objDate, intDays){
             stat_val="doing";this_class="doing_task";
             stat_width=gotTasks[0][idx]['stat'];
         }
-        txt += `<tr><td>${gotTasks[0][idx]['name']}</td><td>${gotTasks[0][idx]['stage']}</td><td>${gotTasks[0][idx]['days']}</td><td class="no_pad"><div id="StatBar" class="${this_class}">${stat_val}</div></td><td>${gotTasks[0][idx]['work_hours']}</td><td>${gotTasks[0][idx]['received']}</td><td><button class="update" onclick="edit_book('${gotTasks[0][idx]['id']}')">Update</button><button class="delete" onclick="del_book('${gotTasks[0][idx]['id']}')">Delete</button></td></tr>`;
+        txt += `<tr><td><span>${gotTasks[0][idx]['name']}</span><div class='grey-fill float_left'><div class='${this_class}' style="width:${stat_width}%;height:12px;border-radius:5px;"></div></div><div class="float_left">${gotTasks[0][idx]['stat']}%</div></td><td><span>${gotTasks[0][idx]['stage']}</span><br><span>${gotTasks[0][idx]['days']}</span></td><!--td>${gotTasks[0][idx]['days']}</td><td class="no_pad"><div class="grey-fill"><div id="StatBar" class="${this_class}" style="width:${stat_width}%">${stat_val}</div></div></td--><td class="centered">${gotTasks[0][idx]['work_hours']}</td><td><span>${assign[0]}</span><br><span>${gotTasks[0][idx]['received']}</span></td><td><button class="update" onclick="edit_book('${gotTasks[0][idx]['id']}')">Update</button><button class="delete" onclick="del_book('${gotTasks[0][idx]['id']}')">Delete</button></td></tr>`;
         }//idx loop
     }
     
