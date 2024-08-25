@@ -239,7 +239,7 @@ function putData(){
                 stat_val="doing";this_class="doing_task";
                 stat_width=putData['stat'];
             }
-            thisTask.innerHTML = `<td>${putData.name}</td><td>${putData.stage}</td><td>${putData.days}</td><td class="no_pad"><div class="grey-fill"><div id="StatBar" class="${this_class}" style="width:${stat_width}%">${stat_val}</div></div></td></td><td class="centered">${putData.work_hours}</td><td>${putData.received}</td><td><button class="update" onclick="edit_book('${taskId}')">Update</button><button class="delete" onclick="del_book('${taskId}')">Delete</button></td>`
+            thisTask.innerHTML = `<td><span>${putData.name}</span><div class='grey-fill float_left'><div class='${this_class}' style="width:${stat_width}%;height:12px;border-radius:5px;"></div></div><div class="float_left">${putData['stat']}%</div></td><td><span>${putData.stage}</span><br><span>${putData.days}</span></td><!--td class="no_pad"><div class="grey-fill"><div id="StatBar" class="${this_class}" style="width:${stat_width}%">${stat_val}</div></div></td--><td class="centered">${putData.work_hours}</td><td>${putData.received}</td><td><button class="update" onclick="edit_book('${taskId}')">Update</button><button class="delete" onclick="del_book('${taskId}')">Delete</button></td>`;
         }
     }
 }
@@ -302,26 +302,6 @@ function openNav(){
     slider.addEventListener("input",(ev)=>{slider_out.textContent = ev.target.value;});
     // document.querySelector("datalist").style.display="flex";
 }
- 
-async function remove_item(){
-    // currently not working
-    const delBtn = document.getElementsByClassName("delete");
-    let jdx = 0;
-    const data = await get_tasks();
-    for (let idx= 0;idx<delBtn.length;idx++){
-        delBtn[idx].onclick = function(){
-            const task = this.parentElement.parentElement;
-            task.style.display = "none";
-            for (let kdx = 0; kdx < data.length; kdx++) {
-                if(data[kdx]['name'] == task.childNodes[0].innerHTML){
-                    jdx = kdx;
-                }
-            }
-            console.log("Bye bye ",task.childNodes[0].innerHTML);
-        }
-    }
-    del_book(data[jdx]['id']);
-}
 
 let formItems=[];
 function validate(e){
@@ -368,4 +348,23 @@ function anim_bar(){
         }
     }
 }
+/*async function remove_item(){
+    // currently not working
+    const delBtn = document.getElementsByClassName("delete");
+    let jdx = 0;
+    const data = await get_tasks();
+    for (let idx= 0;idx<delBtn.length;idx++){
+        delBtn[idx].onclick = function(){
+            const task = this.parentElement.parentElement;
+            task.style.display = "none";
+            for (let kdx = 0; kdx < data.length; kdx++) {
+                if(data[kdx]['name'] == task.childNodes[0].innerHTML){
+                    jdx = kdx;
+                }
+            }
+            console.log("Bye bye ",task.childNodes[0].innerHTML);
+        }
+    }
+    del_book(data[jdx]['id']);
+}*/
 
