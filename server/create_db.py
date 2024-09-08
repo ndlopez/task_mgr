@@ -15,6 +15,13 @@ def init_db():
         connie.commit()
     connie.close()
 
+def add_col():
+   tasky = connie.cursor()
+   tasky.execute(f"ALTER TABLE myTasks ADD assign TEXT")
+   connie.commit()
+
+connie = sqlite3.connect('task.db')
+# add_col() apply once
 curs = connie.cursor()
 print(curs.execute("SELECT * FROM myTasks").fetchall())
 connie.close()
