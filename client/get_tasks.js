@@ -195,6 +195,7 @@ async function edit_book(taskId){
  
     document.getElementById('fhours').value = data[0][idx]['work_hours'];
     document.getElementById('farrive').value = data[0][idx]['received'];
+    document.getElementById('fassign').value = data[0][idx]['assign'];
     // openNav();
     slide.addEventListener("input",(ev)=>{slide_out.textContent = ev.target.value;});
     thisId = taskId; //Updated id
@@ -215,6 +216,7 @@ function putData(){
         // read: document.getElementById('book_read').checked,
         work_hours: workHours,
         received: document.getElementById('farrive').value,
+        assign: document.getElementById('fassign').value,
         //id: self.crypto.randomUUID()
     };
     const path = `${task_url}/${taskId}`;
@@ -241,7 +243,7 @@ function putData(){
                 stat_val="doing";this_class="doing_task";
                 stat_width=putData['stat'];
             }
-            thisTask.innerHTML = `<td><span>${putData.name}</span><div class='grey-fill float_left'><div class='${this_class}' style="width:${stat_width}%;height:12px;border-radius:5px;"></div></div><div class="float_left">${putData['stat']}%</div></td><td><span>${putData.stage}</span><br><span>${putData.days}</span></td><!--td class="no_pad"><div class="grey-fill"><div id="StatBar" class="${this_class}" style="width:${stat_width}%">${stat_val}</div></div></td--><td class="centered">${putData.work_hours}</td><td>${putData.received}</td><td><button class="update" onclick="edit_book('${taskId}')">Update</button><button class="delete" onclick="del_book('${taskId}')">Delete</button></td>`;
+            thisTask.innerHTML = `<td><span>${putData.name}</span><div class='grey-fill float_left'><div class='${this_class}' style="width:${stat_width}%;height:12px;border-radius:5px;"></div></div><div class="col20 float_left">${putData['stat']}%</div></td><td><span>${putData.stage}</span><br><span>${putData.days}</span></td><!--td class="no_pad"><div class="grey-fill"><div id="StatBar" class="${this_class}" style="width:${stat_width}%">${stat_val}</div></div></td--><td class="centered">${putData.work_hours}</td><td><span>${putData.assign}</span><br><span>${putData.received}</span></td><td><button class="update" onclick="edit_book('${taskId}')">Update</button><button class="delete" onclick="del_book('${taskId}')">Delete</button></td>`;
         }
     }
 }
@@ -253,9 +255,9 @@ function add_form(thisTitle="Add a new task",edit=false){
     formDiv.classList.add("modal");
     //formDiv.innerHTML = "<h3>Add a new book</h3>";
     //let txt = "";
-    let buttons = "<input type='button' value='Submit' onclick='get_form()'><input type='button' value='Save' onclick='putData()' disabled>";
+    let buttons = "<input type='button' value='Create task' onclick='get_form()'><!--input type='button' value='Save' onclick='putData()' disabled-->";
     if (edit){
-        buttons = "<input type='button' value='Submit' onclick='get_form()' disabled><input type='button' value='Save' onclick='putData()'>";  
+        buttons = "<!--input type='button' value='Create task' onclick='get_form()' disabled--><input type='button' value='Update task' onclick='putData()'>";  
     }
     let listy = '<datalist id="progres"><option value="0" label="0"></option><option value="20" label="20"></option><option value="40" label="40"></option><option value="60" label="60"></option><option value="80" label="80"></option><option value="100" label="100"></option></datalist>';
     let statThis = '<option value="to-do">To do</option><option value="doing">In progress</option><option value="stuck">Stuck</option><option value="done">Done</option>';
