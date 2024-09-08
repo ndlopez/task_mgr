@@ -54,7 +54,14 @@ table th{
    border-radius: 5px;
 }
 .col80{
-   width: 80%;
+   width: 85%;
+}
+.col20{
+   width: 15%;
+   text-align: right;
+}
+.col50{
+   width: 50%;
 }
 .float_left{
    float: left;
@@ -67,22 +74,25 @@ table th{
 }
 .close {
     position: absolute;
-    top: 10%;
+    top: 11%;
     color: #2e4054;
-    right:15%;
+    right: 25%;
     font-size: 28px;
     font-weight: bold;
 }
 input[type="text"],input[type="range"]{
-    width: 80%;
+    width: 95%;
+    padding: 5px;
 }
 input[type="button"]{
    width: 50%;
 }
 #top_msg{
-    background-color: #ffeea6;
+    /*background-color: #ffeea6;*/
     display: none;
+    padding: 10px;
 }
+.pad10{padding: 10px;}
 #StatBar{
     width: 100%;
     height: 25px;
