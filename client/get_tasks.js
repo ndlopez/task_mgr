@@ -49,7 +49,7 @@ function addDays2Date(objDate, intDays){
             stat_val="doing";this_class="doing_task";
             stat_width=gotTasks[0][idx]['stat'];
         }
-        txt += `<tr><td><span>${gotTasks[0][idx]['name']}</span><div class='grey-fill float_left'><div class='${this_class}' style="width:${stat_width}%;height:12px;border-radius:5px;"></div></div><div class="float_left">${gotTasks[0][idx]['stat']}%</div></td><td><span>${gotTasks[0][idx]['stage']}</span><br><span>${gotTasks[0][idx]['days']}</span></td><!--td>${gotTasks[0][idx]['days']}</td><td class="no_pad"><div class="grey-fill"><div id="StatBar" class="${this_class}" style="width:${stat_width}%">${stat_val}</div></div></td--><td class="centered">${gotTasks[0][idx]['work_hours']}</td><td><span>${assign[0]}</span><br><span>${gotTasks[0][idx]['received']}</span></td><td><button class="update" onclick="edit_book('${gotTasks[0][idx]['id']}')">Update</button><button class="delete" onclick="del_book('${gotTasks[0][idx]['id']}')">Delete</button></td></tr>`;
+        txt += `<tr><td><span>${gotTasks[0][idx]['name']}</span><div class='grey-fill float_left'><div class='${this_class}' style="width:${stat_width}%;height:12px;border-radius:5px;"></div></div><div class="col20 float_left">${gotTasks[0][idx]['stat']}%</div></td><td><span>${gotTasks[0][idx]['stage']}</span><br><span>${gotTasks[0][idx]['days']}</span></td><!--td>${gotTasks[0][idx]['days']}</td><td class="no_pad"><div class="grey-fill"><div id="StatBar" class="${this_class}" style="width:${stat_width}%">${stat_val}</div></div></td--><td class="centered">${gotTasks[0][idx]['work_hours']}</td><td><span>${gotTasks[0][idx]['assign']}</span><br><span>${gotTasks[0][idx]['received']}</span></td><td><button class="update" onclick="edit_book('${gotTasks[0][idx]['id']}')">Update</button><button class="delete" onclick="del_book('${gotTasks[0][idx]['id']}')">Delete</button></td></tr>`;
         }//idx loop
     }
     
@@ -79,9 +79,9 @@ function addDays2Date(objDate, intDays){
            stg_stat = assign[1];
        if (gotTasks[1][idx]['stage'].includes("Release"))
            stg_stat = assign[2];
-        txt += `<tr><span><td>${gotTasks[1][idx]['name']}</span><div class='grey-fill float_left'><div class='${this_class}' style="width:${gotTasks[1][idx]['stat']}%;height:12px;border-radius:5px;"></div></div><div class="float_left">${gotTasks[1][idx]['stat']}%</div>
+        txt += `<tr><span><td>${gotTasks[1][idx]['name']}</span><div class='grey-fill float_left'><div class='${this_class}' style="width:${gotTasks[1][idx]['stat']}%;height:12px;border-radius:5px;"></div></div><div class="col20 float_left">${gotTasks[1][idx]['stat']}%</div>
        </td><td><span>${gotTasks[1][idx]['stage']}</span><br><span>${gotTasks[1][idx]['days']}</span></td>
-       <!--td class="no_pad"><div id="StatBar" class="${this_class}">${stat_val}</div></td--><td class="centered">${gotTasks[1][idx]['work_hours']}</td><td><span>${stg_stat}</span><br><span>${gotTasks[1][idx]['received']}</span></td><td><button class="update" onclick="edit_book('${gotTasks[1][idx]['id']}')">Update</button><button class="delete" onclick="del_book('${gotTasks[1][idx]['id']}')">Delete</button></td></tr>`;
+       <!--td class="no_pad"><div id="StatBar" class="${this_class}">${stat_val}</div></td--><td class="centered">${gotTasks[1][idx]['work_hours']}</td><td><span>${gotTasks[1][idx]['assign']}</span><br><span>${gotTasks[1][idx]['received']}</span></td><td><button class="update" onclick="edit_book('${gotTasks[1][idx]['id']}')">Update</button><button class="delete" onclick="del_book('${gotTasks[1][idx]['id']}')">Delete</button></td></tr>`;
     }
     tab2.innerHTML = txt;
     nxtSec.appendChild(tab2);
