@@ -50,20 +50,23 @@ def remove_task(task_id):
             return True
     return False
 
-def make_dict(tbl,day1,day2):
-    amy = []
-    wkday = date.today().weekday()
-    connie = sqlite3.connect(DB_PATH)
-    tasky = connie.cursor()
-    tasky.execute(f"SELECT * FROM {tbl} WHERE days BETWEEN '{date.today()+timedelta(day1-wkday)}' AND '{date.today()+timedelta(day2-wkday)}' ORDER BY days")
-    print(f"SELECT * FROM {tbl} WHERE days BETWEEN '{date.today()+timedelta(day1-wkday)}' AND '{date.today()+timedelta(day2-wkday)}'")
-    cols = [descr[0] for descr in tasky.description]
-    for row in tasky.fetchall():
-        result = dict(zip(cols,row))
-        amy.append(result)
+def make_dict(tbl,day1,day2,show_all=False):
+   julie = []
+   wkday = date.today().weekday()
+   connie = sqlite3.connect(DB_PATH)
+   tasky = connie.cursor()
+   if show_all:
+       tasky.execute(f"SELECT * FROM {tbl}")
+   else:
+       tasky.execute(f"SELECT * FROM {tbl} WHERE days BETWEEN '{date.today()+timedelta(day1-wkday)}' AND '{date.today()+timedelta(day2-wkday)}' ORDER BY days")
+   print(f"SELECT * FROM {tbl} WHERE days BETWEEN '{date.today()+timedelta(day1-wkday)}' AND '{date.today()+timedelta(day2-wkday)}'")
+   cols = [descr[0] for descr in tasky.description]
+   for row in tasky.fetchall():
+       result = dict(zip(cols,row))
+       julie.append(result)
    
-    connie.close()
-    return amy
+   connie.close()
+   return julie
  
 def make_json(table_name):
     """wkday = date.today().weekday()
@@ -133,7 +136,8 @@ def all_tasks():
             'days': post_data.get('days'),
             'stat': int(post_data.get('stat')),
             'work_hours':int(post_data.get('work_hours')),
-            'received':post_data.get('received')
+            'received':post_data.get('received'),
+            'assign': post_data.get('assign')
             #,'priority':post_data.get('priority')
         })
         response_obj['message'] = 'Task added'
@@ -158,7 +162,8 @@ def single_task(task_id):
             'days': post_data.get('days'),
             'stat': int(post_data.get('stat')),
             'work_hours':int(post_data.get('work_hours')),
-            'received':post_data.get('received')
+            'received':post_data.get('received'),
+            'assign':post_data.get('assign')
             #,'priority':post_data.get('priority')
         })
         response_obj['message'] = 'task updated'
