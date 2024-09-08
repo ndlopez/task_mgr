@@ -33,8 +33,9 @@ function addDays2Date(objDate, intDays){
     let gabi = addDays2Date(Date.now(),8-wkday);
     let oli = addDays2Date(Date.now(),12-wkday);
 
-    if (gotTasks.length < 1){
-        txt += "503: Server Down";
+    if (gotTasks === undefined || gotTasks.length == 0){
+       disp_msg("503: Server Down. Contact Admin","#fadbd0");
+       return
     }else{
         //for (let jdx =0;jdx < gotTasks.length;jdx++){}
         for (let idx=0;idx < gotTasks[0].length; idx++){
@@ -158,10 +159,11 @@ function del_book(taskId){
 }
 
 function disp_msg(this_msg){
-    let topp = document.getElementById('top_msg');
-    topp.style.display = "block";
-    topp.innerHTML = this_msg;
-    // must add temporizer to rm msg
+   /* must add a timer */
+   let topp = document.getElementById('top_msg');
+   topp.style.backgroundColor = degree;
+   topp.style.display = "block";
+   topp.innerHTML = this_msg;
 }
 
 async function edit_book(taskId){
