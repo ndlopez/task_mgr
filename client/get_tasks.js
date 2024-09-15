@@ -159,36 +159,36 @@ function disp_msg(this_msg){
     },1000);
 }
 
-async function edit_book(taskId){
+async function edit_book(taskId,weekId){
     const data = await get_tasks();
     console.log("Editing...",taskId);
     mainDiv.appendChild(add_form("Edit task",true));
     //openNav();
     let idx = 0;
     // must find the task index
-    for (let jdx = 0; jdx < data[0].length; jdx++){
+    for (let jdx = 0; jdx < data[weekId].length; jdx++){
         /*if (Object.hasOwnProperty(key)){}*/
-        if (data[0][jdx]['id'] == taskId){
+        if (data[weekId][jdx]['id'] == taskId){
             idx = jdx;
             console.log("thisIdx",idx);
             break;
         }
     }
     // console.log("thisData",data[idx]);
-    document.getElementById('fname').value = data[0][idx]['name'];
+    document.getElementById('fname').value = data[weekId][idx]['name'];
     let selStg = document.getElementById('fstage');
-    selStg.options[selStg.selectedIndex].text = data[0][idx]['stage'];
-    document.getElementById('fweek').value = data[0][idx]['days'];
+    selStg.options[selStg.selectedIndex].text = data[weekId][idx]['stage'];
+    document.getElementById('fweek').value = data[weekId][idx]['days'];
    
     let slide = document.getElementById("fstat");
-    slide.value = data[0][idx]['stat'];
+    slide.value = data[weekId][idx]['stat'];
     let slide_out = document.getElementById("rngVal")
     slide_out.textContent = slide.value;
-    // document.getElementById('rngVal').value = data[0][idx]['stat'];
+    // document.getElementById('rngVal').value = data[weekId][idx]['stat'];
  
-    document.getElementById('fhours').value = data[0][idx]['work_hours'];
-    document.getElementById('farrive').value = data[0][idx]['received'];
-    document.getElementById('fassign').value = data[0][idx]['assign'];
+    document.getElementById('fhours').value = data[weekId][idx]['work_hours'];
+    document.getElementById('farrive').value = data[weekId][idx]['received'];
+    document.getElementById('fassign').value = data[weekId][idx]['assign'];
     // openNav();
     slide.addEventListener("input",(ev)=>{slide_out.textContent = ev.target.value;});
     thisId = taskId; //Updated id
@@ -236,7 +236,8 @@ function putData(){
                 stat_val="doing";this_class="doing_task";
                 stat_width=putData['stat'];
             }
-            thisTask.innerHTML = `<td><span>${putData.name}</span><div class='grey-fill float_left'><div class='${this_class}' style="width:${stat_width}%;height:12px;border-radius:5px;"></div></div><div class="col20 float_left">${putData['stat']}%</div></td><td><span>${putData.stage}</span><br><span>${putData.days}</span></td><!--td class="no_pad"><div class="grey-fill"><div id="StatBar" class="${this_class}" style="width:${stat_width}%">${stat_val}</div></div></td--><td class="centered">${putData.work_hours}</td><td><span>${putData.assign}</span><br><span>${putData.received}</span></td><td><button class="update" onclick="edit_book('${taskId}')">Update</button><button class="delete" onclick="del_book('${taskId}')">Delete</button></td>`;
+            thisTask.innerHTML = `<td><span>${putData.name}</span><div class='grey-fill float_left'><div class='${this_class}' style="width:${stat_width}%;height:12px;border-radius:5px;"></div></div><div class="col20 float_left">${putData['stat']}%</div></td><td><span>${putData.stage}</span><br><span>${putData.days}</span></td><td class="centered">${putData.work_hours}</td><td><span>${putData.assign}</span><br><span>${putData.received}</span></td><td><button class="update" onclick="edit_book('${taskId}',0)">Update</button><button class="delete" onclick="del_book('${taskId}')">Delete</button></td>`;
+            /*<!--td class="no_pad"><div class="grey-fill"><div id="StatBar" class="${this_class}" style="width:${stat_width}%">${stat_val}</div></div></td-->*/
         }
     }
 }
