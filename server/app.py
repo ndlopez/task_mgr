@@ -149,7 +149,7 @@ def all_tasks():
     return jsonify(response_obj)
 
  
-@app.route('/tasks/<task_id>',methods=['PUT','DELETE'])
+@app.route('/tasks/<task_id>',methods=['PUT','DELETE','GET'])
 def single_task(task_id):
     response_obj = {'status':'success'}
     if request.method == 'PUT':
@@ -168,9 +168,16 @@ def single_task(task_id):
         })
         response_obj['message'] = 'task updated'
         insert_from_js(TASKS[-1], TBL_NAME)
-    if request.method == 'DELETE':
+    elif request.method == 'DELETE':
         remove_task(task_id)
         response_obj['message'] = 'task removed'
+    else:
+        # request.method == 'GET':
+        try:
+            aux = next(item for item in TASKS if task_id in item["id"])
+            response_obj["task"] = aux
+        except StopIteration:
+            aux = f"Please fix your input, dont add quots to item. Or {task_id} is not on the DB"
     return jsonify(response_obj)
 
  
