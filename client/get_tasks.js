@@ -111,7 +111,8 @@ function add_task(postData){
         stat_width=postData['stat'];
     }
     const trEl = document.createElement("TR");
-    trEl.innerHTML = `<td><span>${postData['name']}</span><div class='grey-fill float_left'><div class='${this_class}' style="width:${stat_width}%;height:12px;border-radius:5px;"></div></div><div class="float_left">${postData['stat']}%</div></td><td><span>${postData['stage']}</span><br><span>${postData['days']}</span></td><!--td class="no_pad"><div class="grey-fill"><div id="StatBar" class="${this_class}" style="width:${stat_width}%">${stat_val}</div></div></td--><td class="centered">${postData['work_hours']}</td><td>${postData['received']}</td><td><button class="update" onclick="edit_book('${postData['id']}')">Update</button><button class="delete" onclick="del_book('${postData['id']}')">Delete</button></td>`;
+    trEl.innerHTML = `<td><span>${postData['name']}</span><div class='grey-fill float_left'><div class='${this_class}' style="width:${stat_width}%;height:12px;border-radius:5px;"></div></div><div class="col20 float_left">${postData['stat']}%</div></td><td><span>${postData['stage']}</span><br><span>${postData['days']}</span></td><td class="centered">${postData['work_hours']}</td><td>${postData['received']}</td><td><button class="update" onclick="edit_book('${postData['id']}',0)">Update</button><button class="delete" onclick="del_book('${postData['id']}')">Delete</button></td>`;
+   /*<!--td class="no_pad"><div class="grey-fill"><div id="StatBar" class="${this_class}" style="width:${stat_width}%">${stat_val}</div></div></td-->*/
    
     document.getElementsByTagName("tbody")[0].appendChild(trEl);
     //console.log("new item",tab,trEl);
@@ -132,7 +133,7 @@ function del_book(taskId){
             console.log("Bye bye",delBtn[idx].outerHTML);
             const taskParent = delBtn[idx].parentElement.parentElement;
             // console.log("parent",task);
-            disp_msg(`Bye bye ${taskParent.firstChild.innerText}`);
+            disp_msg(`Bye bye ${taskParent.firstChild.innerText}`,"#ff6700");
             taskParent.remove();
             // task.style.display = "none";
         }
@@ -140,11 +141,22 @@ function del_book(taskId){
 }
 
 function disp_msg(this_msg){
-   /* must add a timer */
-   let topp = document.getElementById('top_msg');
-   topp.style.backgroundColor = degree;
-   topp.style.display = "block";
-   topp.innerHTML = this_msg;
+    /* Updates window if server is down every 10s*/
+    let topp = document.getElementById('top_msg');
+    topp.style.backgroundColor = degree;
+   
+    let countDownDate = new Date().getTime() + 10000;
+    setInterval(()=>{
+        let now = new Date().getTime();
+        const distance = countDownDate - now;
+        topp.style.display = "block";
+        topp.innerHTML = this_msg;
+        // console.log(now,countDownDate,distance); 
+        if(distance < 0){
+            topp.style.display = "none";
+            if (degree == "#fadbd0"){window.location.reload();}
+        }
+    },1000);
 }
 
 async function edit_book(taskId){
