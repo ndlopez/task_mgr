@@ -63,9 +63,14 @@ table th{
 .col50{
    width: 50%;
 }
+.col5{
+   width:20%;
+   text-align:center;
+}
 .float_left{
    float: left;
 }
+.this_day{ background-color:#bed2e0;}
 .delete{
     color: #cc274c;
 }
