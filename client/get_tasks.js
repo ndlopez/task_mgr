@@ -326,19 +326,36 @@ function openNav(){
 }
 
 function gen_uuid() {
-   /* Generate uuid: Since HTTP server doesnt have a security cert*/
-   let uuidValue = "", k, randomValue;
-   for (k = 0; k < 32; k++) {
-       randomValue = (Math.random() * 16) | 0;
-       if (k == 8 || k == 12 || k == 16 || k == 20) {
-           uuidValue += "-";
-       }
-       uuidValue += (
-           k == 12 ? 4 : k == 16 ? (randomValue & 3) | 8 : randomValue
-       ).toString(16);
-   }
-   return uuidValue;
+    /* Generate uuid: Since HTTP server doesnt have a security cert*/
+    let uuidValue = "", k, randomValue;
+    for (k = 0; k < 32; k++) {
+        randomValue = (Math.random() * 16) | 0;
+        if (k == 8 || k == 12 || k == 16 || k == 20) {
+            uuidValue += "-";
+        }
+        uuidValue += (
+            k == 12 ? 4 : k == 16 ? (randomValue & 3) | 8 : randomValue
+        ).toString(16);
+    }
+    return uuidValue;
 }
+
+function make_new(dataDic){
+    let this_class="",stat_width="";
+    /* Update client-side */
+    if (dataDic['stat'] == 100){
+        this_class="done_task";
+        stat_width="100";
+    }else if(dataDic['stat'] == 0){
+        this_class="todo_task";
+        stat_width="100";
+    }else{
+        this_class="doing_task";
+        stat_width=dataDic['stat'];
+    }
+    return `<td><span>${dataDic['name']}</span><div class='grey-fill float_left'><div class='${this_class}' style="width:${stat_width}%;height:12px;border-radius:5px;"></div></div><div class="col20 float_left">${dataDic['stat']}%</div></td><td><span>${dataDic['stage']}</span><span>${dataDic['days']}</span></td><td class="centered">${dataDic['work_hours']}</td><td><span>${dataDic.assign}</span><span>${dataDic.received}</span></td><td><button class="update" onclick="edit_book('${dataDic['id']}',0)">Update</button><button class="delete" onclick="del_book('${dataDic['id']}')">Delete</button></td>`;
+}
+
 let formItems=[];
 function validate(e){
     const inps=document.querySelectorAll('input');
