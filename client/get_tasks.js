@@ -9,7 +9,14 @@ let thisAhead = (kate)=>{return thisDate.setDate(dayna + kate - wkday);}
 const months = ["January","February","March","April","May","June","July",
 "August","September","October","November","December"];
 const assign = ["Me","Boss","Client"];
+
 let fiveDays = new Date(thisAhead(5)); 
+const days = ["Mon","Tue","Wed","Thu","Fri"];
+let divSpan = "<div>";
+days.forEach(el => {
+   divSpan += `<span class='col5 float_left'>${el}</span>` 
+});
+divSpan+="</span>";
 
 const mainDiv = document.getElementById("root");
 mainDiv.innerHTML = `<h2>Doing Projects</h2><div class="tasky"><h3>&nbsp;This week: ${thisDate.getFullYear()} ${months[monty]} ${dayna-wkday+1}(Mon) ~ ${months[fiveDays.getMonth()]} ${fiveDays.getDate()}(Fri)</h3><p><button onclick='openNav()'>Add Task</button></p></div>`;
@@ -29,16 +36,30 @@ function addDays2Date(objDate, intDays){
     const gotTasks = await get_tasks();
     
     let stat_val="",this_class="",stat_width="";
-    let txt="", aux = "", stg_stat="";
+    let txt="", aux = "", stg_stat="",idx,zoey = [];;
     
     let gabi = addDays2Date(Date.now(),8-wkday);
     let oli = addDays2Date(Date.now(),12-wkday);
+    for (idx=1;idx < 5;idx++){
+        zoey.push(dayna-wkday+idx)
+    }
+    zoey.push(fiveDays.getDate());
     if (gotTasks === undefined || gotTasks.length == 0){
         disp_msg("503: Server Down. Contact Admin","#fadbd0");
         return
     }else{
+        divSpan += "<div>";
+        for(let kdx=0; kdx < zoey.length; kdx++){
+            this_class = "";
+            if ((kdx+1) == wkday){
+                this_class = "this_day";
+            }
+            divSpan += `<span class='col5 float_left ${this_class}'>${zoey[kdx]}</span>`;
+        }
+        divSpan += "</div>"
         for (let jdx =0;jdx < gotTasks.length;jdx++){
-        aux = `This week: ${thisDate.getFullYear()} ${months[monty]} ${dayna-wkday+1}(Mon) ~ ${months[fiveDays.getMonth()]} ${fiveDays.getDate()}`;
+            aux = `${thisDate.getFullYear()} ${months[monty]} ${divSpan}`;
+            /*aux = `This week: ${thisDate.getFullYear()} ${months[monty]} ${dayna-wkday+1}(Mon) ~ ${months[fiveDays.getMonth()]} ${fiveDays.getDate()}`;*/
         if (jdx == 1){
             aux = `Next week: ${thisDate.getFullYear()} ${months[gabi.getMonth()]} ${gabi.getDate()}(Mon) ~ ${months[oli.getMonth()]} ${oli.getDate()}`;
         }
